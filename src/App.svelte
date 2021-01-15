@@ -38,6 +38,7 @@
   
   <div class="wrapper">
 	<h1>Rick and Morty</h1>
+	<!-- svelte-ignore a11y-label-has-associated-control -->
 	<label class="search-c">Character:</label>
 	<input
 	  class="search-c"
