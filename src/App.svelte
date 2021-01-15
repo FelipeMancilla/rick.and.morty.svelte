@@ -1,30 +1,49 @@
 <script>
-	export let name;
-</script>
-
-<main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
-</main>
-
-<style>
-	main {
-		text-align: center;
-		padding: 1em;
-		max-width: 240px;
-		margin: 0 auto;
+	import Characters from "./Characters.svelte";
+	import { onMount } from "svelte";
+  
+	const API = "https://rickandmortyapi.com/api/character";
+	let query = "";
+	let data = [];
+	let characters = [];
+  
+	onMount(async () => {
+	  const res = await fetch(API);
+	  data = await res.json();
+	  characters = data.results;
+	});
+  
+	async function onChangeInput() {
+	  const APIFILTER = `https://rickandmortyapi.com/api/character/?name=${query}`;
+	  const res = await fetch(APIFILTER);
+	  data = await res.json();
+	  characters = data.results;
 	}
-
+  </script>
+  
+  <style>
+	.search-c {
+	  width: -moz-available;
+	  width: -webkit-fill-available;
+	  width: fill-available;
+	  margin: 10px;
+	  font-size: 20px;
+	  margin-left: 10%;
+	  margin-right: 10%;
+	}
 	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
+	  text-align: center;
 	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
-</style>
+  </style>
+  
+  <div class="wrapper">
+	<h1>Rick and Morty</h1>
+	<label class="search-c">Character:</label>
+	<input
+	  class="search-c"
+	  type="text"
+	  name="search"
+	  bind:value={query}
+	  on:keydown={onChangeInput} />
+	<Characters {characters} />
+  </div>
